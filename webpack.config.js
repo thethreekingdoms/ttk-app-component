@@ -1,4 +1,6 @@
-const path = require('path');
+const path = require('path')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const plugins = []
@@ -9,6 +11,23 @@ const plugins = []
 // }]))
 
 var projectRootPath = path.resolve(__dirname, './')
+
+plugins.push(new webpack.DllReferencePlugin({
+    context: __dirname,
+    manifest:  require('./vendor/vendor.manifest.json'),
+}))
+plugins.push(new HtmlWebpackPlugin({
+    title: 'ttk组件', //标题
+    filename: 'index.html', //生成的html存放路径，相对于 path
+    template: 'index.html', //html模板路径
+    hash: false,
+    inject: 'body', //允许插件修改哪些内容，包括head与body`
+    minify: { //压缩HTML文件
+        removeComments: true, //移除HTML中的注释
+        collapseWhitespace: true, //删除空白符与换行符
+        removeAttributeQuotes: true
+    }
+}))
 module.exports = {
     entry: {
         index: './src/index.js'
@@ -24,8 +43,6 @@ module.exports = {
             'edf-app-loader': path.resolve(projectRootPath, './app-loader/index.js'),
             'edf-meta-engine': path.resolve(projectRootPath, './meta-engine/index.js'),
             'edf-utils': path.resolve(projectRootPath, './utils/index.js'),
-            'echarts': path.resolve(projectRootPath, './vendor/echarts.min.js'),
-            'zrender': path.resolve(projectRootPath, './vendor/zrender.min.js'),
             'ttk-component': path.resolve(projectRootPath, './src/ttk-component.js')
         }
     },

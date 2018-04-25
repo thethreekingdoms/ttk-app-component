@@ -1,4 +1,5 @@
-const path = require('path');
+const path = require('path')
+const webpack =  require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
@@ -8,6 +9,12 @@ const plugins = []
 //     from: '**/*',
 //     to: 'assets'
 // }]))
+
+const projectRootPath = path.resolve(__dirname, './')
+plugins.push(new webpack.DllReferencePlugin({
+    context: __dirname,
+    manifest:  require('./vendor/vendor.manifest.json'),
+}))
 plugins.push(new HtmlWebpackPlugin({
     title: 'ttk组件', //标题
     filename: 'index.html', //生成的html存放路径，相对于 path
@@ -21,7 +28,6 @@ plugins.push(new HtmlWebpackPlugin({
     }
 }))
 plugins.push(new UglifyJsPlugin())
-var projectRootPath = path.resolve(__dirname, './')
 module.exports = {
     entry: {
         index: './src/index.js'
@@ -37,8 +43,6 @@ module.exports = {
             'edf-app-loader': path.resolve(projectRootPath, './app-loader/index.js'),
             'edf-meta-engine': path.resolve(projectRootPath, './meta-engine/index.js'),
             'edf-utils': path.resolve(projectRootPath, './utils/index.js'),
-            'echarts': path.resolve(projectRootPath, './vendor/echarts.min.js'),
-            'zrender': path.resolve(projectRootPath, './vendor/zrender.min.js'),
             'ttk-component': path.resolve(projectRootPath, './src/ttk-component.js')
         }
     },

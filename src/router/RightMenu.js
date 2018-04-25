@@ -5,9 +5,6 @@ const SubMenu = Menu.SubMenu;
 class RightMenu extends React.Component {
     state = {
         collapsed: false,
-        selfDemo: [
-            
-        ],
         demoArr: [
             'activeLabelSelect',
             'city',
@@ -79,17 +76,6 @@ class RightMenu extends React.Component {
       });
     }
 
-    renderItem2 = () => {
-        const {selfDemo} = this.state
-        return selfDemo.map(item => {
-            return (
-                <Menu.Item key={item}>
-                    <a href={`#${item}`}>{item}</a>
-                </Menu.Item>
-            )
-        })
-    }
-
     handleClick = (key) => {
         this.props.handleClick && this.props.handleClick(key)
     }
@@ -116,9 +102,6 @@ class RightMenu extends React.Component {
                 inlineCollapsed={this.state.collapsed}
                 onSelect={(e) =>this.handleClick(e.key)}
             >
-                <Menu.Item key='detail'>
-                    <span>关于我们</span>
-                </Menu.Item>
                 <SubMenu key='sub2' title="组件列表">
                     {this.renderItem()}
                 </SubMenu>
