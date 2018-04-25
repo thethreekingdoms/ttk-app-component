@@ -1,47 +1,31 @@
 import React from 'react'
-import { Dropdown, Menu } from 'ttk-component'
-import Code from '../../code'
-import str from './string'
+import { Spin } from 'antd'
+import { isNull } from 'util';
 
-class DropDown2 extends React.Component{
+class Container extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-
+            loading: true,
+            children: null
         }
     }
-    render(){
-        const menu = (
-            <Menu>
-                <Menu.Item>
-                    <a target="_blank" rel="noopener noreferrer">1st menu item</a>
-                </Menu.Item>
-                <Menu.Item>
-                    <a target="_blank" rel="noopener noreferrer">2nd menu item</a>
-                </Menu.Item>
-                <Menu.Item>
-                    <a target="_blank" rel="noopener noreferrer">3rd menu item</a>
-                </Menu.Item>
-            </Menu>
-        )
+    componentDidMount(){
+        import('./component').then((res) => {
+            console.log(typeof res)
+            this.setState({
+                loading: false,
+                children: res
+            })
+        })
+    }
+    render() {
         return (
-            <div>
-                <Dropdown overlay={menu}>
-                    <a className="ant-dropdown-link" href="#">
-                        Click me
-                    </a>
-                </Dropdown>
-                <div>
-                    <p>代码</p>
-                    <Code value={str} />
-                </div>
-                <div>
-                    <a href="http://ant-design.gitee.io/components/dropdown-cn/" target="_blank">请参考antd dropdown </a>
-                </div>
-            </div>
+            <Spin spinning={this.state.loading}>
+                {this.state.children}
+            </Spin>
         )
     }
 }
 
-
-export default DropDown2
+export default Container

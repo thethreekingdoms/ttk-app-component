@@ -2,6 +2,7 @@ const path = require('path')
 const webpack =  require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const plugins = []
 // plugins.push(new CopyWebpackPlugin([{
@@ -9,7 +10,11 @@ const plugins = []
 //     from: '**/*',
 //     to: 'assets'
 // }]))
-
+plugins.push(new CopyWebpackPlugin([{
+    from: './vendor',
+    to: './vendor',
+    ignore: ['.*']
+}]))
 const projectRootPath = path.resolve(__dirname, './')
 plugins.push(new webpack.DllReferencePlugin({
     context: __dirname,

@@ -1,36 +1,31 @@
 import React from 'react'
-import { TableSort } from 'ttk-component'
-import Code from '../../code'
-import str from './string'
-import MarkDown  from 'react-markdown'
-import markStr from './markdown'
+import { Spin } from 'antd'
+import { isNull } from 'util';
 
-export default class TableSortDemo extends React.Component{
+class Container extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            sortOrder: 'asc'
+            loading: true,
+            children: null
         }
     }
-
-    handleClick = (value) => {
-        console.log(value)
-        this.setState({
-            sortOrder: value
+    componentDidMount(){
+        import('./component').then((res) => {
+            console.log(typeof res)
+            this.setState({
+                loading: false,
+                children: res
+            })
         })
     }
-
-    render(){
-        return(
-            <div>
-                <TableSort
-                    sortOrder={this.state.sortOrder}
-                    handleClick={(e) => this.handleClick(e)}
-                />
-                <p>代码</p>
-                <MarkDown source={markStr} />
-                <Code value={str} />
-            </div>
+    render() {
+        return (
+            <Spin spinning={this.state.loading}>
+                {this.state.children}
+            </Spin>
         )
     }
 }
+
+export default Container

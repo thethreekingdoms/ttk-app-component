@@ -8,7 +8,7 @@ import Example1 from './example/example1'
 import readmeMd from './md/readme.md'
 
 
-export default class Demo extends Component {
+class Demo extends Component {
 	render() {
 		return (
 			<div>
@@ -24,3 +24,4 @@ export default class Demo extends Component {
 	}
 
 }
+export default <Demo />

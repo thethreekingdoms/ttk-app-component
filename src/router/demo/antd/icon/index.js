@@ -1,26 +1,31 @@
-import React, { Component } from 'react'
- import Example from '../../../example'
-import Markdown from 'react-markdown'
+import React from 'react'
+import { Spin } from 'antd'
+import { isNull } from 'util';
 
-import example1Md from './md/example1'
-import Example1 from './example/example1'
-
-import readmeMd from './md/readme'
-
-
-export default class Demo extends Component {
-	render() {
-		return (
-			<div>
-				<Example
-					title='示例一：图标'
-					content={<Example1 />}
-					doc={example1Md}
-				/>
-
-				<Markdown source={ readmeMd } />
-			</div>
-		)
-	}
-
+class Container extends React.Component{
+    constructor(props){
+        super(props)
+        this.state = {
+            loading: true,
+            children: null
+        }
+    }
+    componentDidMount(){
+        import('./component').then((res) => {
+            console.log(typeof res)
+            this.setState({
+                loading: false,
+                children: res
+            })
+        })
+    }
+    render() {
+        return (
+            <Spin spinning={this.state.loading}>
+                {this.state.children}
+            </Spin>
+        )
+    }
 }
+
+export default Container

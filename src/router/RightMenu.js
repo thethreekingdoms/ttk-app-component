@@ -95,7 +95,7 @@ class RightMenu extends React.Component {
       return (
         <div>
             <Menu
-                defaultSelectedKeys={['1']}
+                defaultSelectedKeys={['activeLabelSelect']}
                 defaultOpenKeys={['sub2']}
                 mode="inline"
                 theme="dark"

@@ -8,7 +8,7 @@ class Router extends React.Component{
   constructor(props){
     super(props)
     const hash = window.location.hash ? window.location.hash.replace('#/', '') : ''
-    let children = hash && demo[hash] ? demo[hash] : demo.detail
+    let children = hash && demo[hash] ? demo[hash] : demo.activeLabelSelect
     this.state={
       children: children
     }

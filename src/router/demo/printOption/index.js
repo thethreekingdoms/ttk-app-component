@@ -1,20 +1,31 @@
 import React from 'react'
-import { PrintOption, PrintOption2 } from 'ttk-component'
+import { Spin } from 'antd'
+import { isNull } from 'util';
 
-
-export default class PrintOptionDemo extends React.Component{
+class Container extends React.Component{
     constructor(props){
         super(props)
-        this.state={}
+        this.state = {
+            loading: true,
+            children: null
+        }
     }
-    submitPrintOption = (...arg) => {
-        console.log(arg)
+    componentDidMount(){
+        import('./component').then((res) => {
+            console.log(typeof res)
+            this.setState({
+                loading: false,
+                children: res
+            })
+        })
     }
-    render(){
-        return(
-            <div>
-                
-            </div>
+    render() {
+        return (
+            <Spin spinning={this.state.loading}>
+                {this.state.children}
+            </Spin>
         )
     }
 }
+
+export default Container
