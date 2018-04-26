@@ -8,7 +8,7 @@
   "plugins": [
     ["transform-runtime"],
     ["add-module-exports"],
-    ["transform-decorators-legacy"],
-    ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }] 
+    ["transform-decorators-legacy"]
+    //["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }] 
   ]
 }

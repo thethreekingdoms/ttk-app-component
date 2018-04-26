@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
+const ExtractTextPlugin = require("extract-text-webpack-plugin")
 const plugins = []
 // plugins.push(new CopyWebpackPlugin([{
 //     context: './src/assets',
@@ -15,6 +16,8 @@ plugins.push(new CopyWebpackPlugin([{
     to: './vendor',
     ignore: ['.*']
 }]))
+
+plugins.push(new ExtractTextPlugin('[name].css'))
 const projectRootPath = path.resolve(__dirname, './')
 plugins.push(new webpack.DllReferencePlugin({
     context: __dirname,
@@ -32,10 +35,22 @@ plugins.push(new HtmlWebpackPlugin({
         removeAttributeQuotes: true
     }
 }))
+
+plugins.push(new webpack.optimize.CommonsChunkPlugin({
+    names: ['ttk-component'],
+    filename: 'ttk-component.min.js',
+    minChunks: Infinity
+}))
+
 plugins.push(new UglifyJsPlugin())
 module.exports = {
     entry: {
-        index: './src/index.js'
+        index: './src/index.js',
+        'ttk-component': './src/ttk-component.js',
+        'sumstyle': './src/style/index.less',
+        'codemirror': 'codemirror/lib/codemirror.css',
+        'codemirrormaterial': 'codemirror/theme/material.css',
+        "icon": './src/assets/style/iconset.less'
     },
     devtool: false,
     output: {
@@ -53,22 +68,18 @@ module.exports = {
     },
     module: {
         rules: [{
-                test: /\.css$/,
-                //exclude: /node_modules/,
-                use: [{
-                    loader: 'style-loader'
-                }, {
-                    loader: 'css-loader'
-                }]
-            }, {
-                test: /\.less$/,
-                use: [{
-                    loader: 'style-loader'
-                }, {
-                    loader: 'css-loader'
-                }, {
-                    loader: 'less-loader'
-                }]
+                test: /\.(css|less)/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [{
+                        loader: "css-loader",
+                        options: {
+                            minimize: true
+                        }
+                    }, {
+                        loader: "less-loader"
+                    }]
+                })
             },{
                 test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif|mp4|webm)(\?\S*)?$/,
                 use: {

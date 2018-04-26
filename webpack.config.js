@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
+const ExtractTextPlugin = require("extract-text-webpack-plugin")
 const plugins = []
 // plugins.push(new CopyWebpackPlugin([{
 //     context: './src/assets',
@@ -16,6 +17,15 @@ plugins.push(new webpack.DllReferencePlugin({
     context: __dirname,
     manifest:  require('./vendor/vendor.manifest.json'),
 }))
+
+plugins.push(new ExtractTextPlugin('[name].css'))
+
+plugins.push(new webpack.optimize.CommonsChunkPlugin({
+    names: ['ttk-component'],
+    filename: 'ttk-component.min.js',
+    minChunks: Infinity
+}))
+
 plugins.push(new HtmlWebpackPlugin({
     title: 'ttk组件', //标题
     filename: 'index.html', //生成的html存放路径，相对于 path
@@ -30,7 +40,12 @@ plugins.push(new HtmlWebpackPlugin({
 }))
 module.exports = {
     entry: {
-        index: './src/index.js'
+        index: './src/index.js',
+        "ttk-component": './src/ttk-component.js',
+        'sumstyle': './src/style/index.less',
+        'codemirror': 'codemirror/lib/codemirror.css',
+        'codemirrormaterial': 'codemirror/theme/material.css',
+        "icon": './src/assets/style/iconset.less'
     },
     devtool: 'source-map',
     output: {
@@ -51,22 +66,18 @@ module.exports = {
     },
     module: {
         rules: [{
-                test: /\.css$/,
-                //exclude: /node_modules/,
-                use: [{
-                    loader: 'style-loader'
-                }, {
-                    loader: 'css-loader'
-                }]
-            }, {
-                test: /\.less$/,
-                use: [{
-                    loader: 'style-loader'
-                }, {
-                    loader: 'css-loader'
-                }, {
-                    loader: 'less-loader'
-                }]
+                test: /\.(css|less)/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [{
+                        loader: "css-loader",
+                        options: {
+                            minimize: true
+                        }
+                    }, {
+                        loader: "less-loader"
+                    }]
+                })
             },{
                 test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif|mp4|webm)(\?\S*)?$/,
                 use: {
