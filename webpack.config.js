@@ -43,6 +43,7 @@ module.exports = {
         index: './src/index.js',
         "ttk-component": './src/ttk-component.js',
         'sumstyle': './src/style/index.less',
+        'codemirrorcode': 'codemirror/mode/javascript/javascript',
         'codemirror': 'codemirror/lib/codemirror.css',
         'codemirrormaterial': 'codemirror/theme/material.css',
         "icon": './src/assets/style/iconset.less'
