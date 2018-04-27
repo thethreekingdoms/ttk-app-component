@@ -33,7 +33,8 @@ module.exports = {
 			'react-resizable',
 			'react-viewer',
 			'redux',
-			'echarts'
+			'echarts',
+			'lodash.clonedeep'
 		],
 	},
 	output: {

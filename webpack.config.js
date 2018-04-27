@@ -12,7 +12,11 @@ const plugins = []
 // }]))
 
 var projectRootPath = path.resolve(__dirname, './')
-
+plugins.push(new CopyWebpackPlugin([{
+    from: './vendor',
+    to: './vendor',
+    ignore: ['.*']
+}]))
 plugins.push(new webpack.DllReferencePlugin({
     context: __dirname,
     manifest:  require('./vendor/vendor.manifest.json'),

@@ -253,6 +253,10 @@ class RightMenu extends React.Component {
             {
                 name: '上传',
                 key: 'upload'
+            },
+            {
+                name: '栏目设置',
+                key: 'columnsSetting'
             }
         ]
     }

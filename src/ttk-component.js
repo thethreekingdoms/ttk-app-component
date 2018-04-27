@@ -64,6 +64,7 @@ import TagComponent from './components/tag/index'
 import ActiveLabelSelectComponent from './components/activeLabelSelect/index'
 import NoDataComponent from './components/nodata/index'
 import DateRangeMonthPickerComponent from './components/dateRangeMonthPicker/index'
+import ColumnsSettingComponent from './components/columnsSetting/index'
 
 
 export const Address = AddressComponent
@@ -135,3 +136,6 @@ export const Tag = TagComponent
 export const ActiveLabelSelect = ActiveLabelSelectComponent
 export const DateRangeMonthPicker = DateRangeMonthPickerComponent
 export const NoData = NoDataComponent
+
+
+export const ColumnsSetting= ColumnsSettingComponent

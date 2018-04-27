@@ -54,6 +54,7 @@ import Transfer from './antd/transfer'
 import Tree from './antd/tree'
 import TreeSelect from './antd/treeSelect'
 import Upload from './antd/upload'
+import ColumnsSetting from './columnsSetting'
 
 export default {
     button: () => <Button/>,
@@ -109,5 +110,6 @@ export default {
     transfer: () => <Transfer />,
     tree: () => <Tree />,
     treeSelect: () => <TreeSelect />,
-    upload: () => <Upload />
+    upload: () => <Upload />,
+    columnsSetting: () => <ColumnsSetting/>
 }
