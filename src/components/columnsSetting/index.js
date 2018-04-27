@@ -14,6 +14,26 @@ class ColumnsSetting extends React.Component {
             label: '',
             editingKey: null
         }
+        if( props.setOkListener ) {
+            props.setOkListener(this.onOk)
+        }
+        if( props.setCancelLister ) {
+            props.setCancelLister(this.onCancel)
+        }
+    }
+
+    onOk = async () => {
+        return {
+            type: 'confirm',
+            option: clonedeep(this.state.option)
+        }
+    }
+
+    onCancel = async() => {
+        return {
+            type: 'cancel',
+            option: clonedeep(this.props.option)
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -64,7 +84,6 @@ class ColumnsSetting extends React.Component {
         const { singleKey, checkedKey, itemClick } = this.props
         const { option } = this.state
         const index = option.findIndex(item => item[singleKey] == key)
-        console.log(index)
         if( index > -1 ){
             option[index][checkedKey] = e.target.checked
             this.setState({
@@ -191,6 +210,12 @@ class ColumnsSetting extends React.Component {
         this.setState({
             option: clonedeep(option)
         })
+        if( this.props.closeModal ){
+            return this.props.closeModal({
+                type: 'reset',
+                option: clonedeep(this.props.option)
+            })
+        }
         return resetClick && resetClick()
     }
 
@@ -228,10 +253,15 @@ class ColumnsSetting extends React.Component {
                 <div className="ttk-ColumnsSetting-container">
                     {this.renderItem(option)}
                 </div>
-                <div className="ttk-ColumnsSetting-footer">
-                    <Button type="primary" onClick={this.confirmClick}>确定</Button>
-                    <Button onClick={this.cancelClick}>取消</Button>
-                </div>
+                {
+                    !this.props.setOkListener ? (
+                        <div className="ttk-ColumnsSetting-footer">
+                            <Button type="primary" onClick={this.confirmClick}>确定</Button>
+                            <Button onClick={this.cancelClick}>取消</Button>
+                        </div>
+                    ) : null
+                }
+                
             </div>
         )
     }
