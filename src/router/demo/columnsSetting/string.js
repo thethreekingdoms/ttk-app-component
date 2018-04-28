@@ -2,35 +2,72 @@ export default `
 import React from 'react'
 import { ColumnsSetting } from 'ttk-component'
 import classNames from 'classnames'
+import Example from '../../example'
 
 const initOption =  [{
-    id: 1,
-    name: '第一',
-    visible: true
+    key: 'detail',
+    name: '明细',
+    option: [{
+        id: 1,
+        name: '第一',
+        visible: true
+    }, {
+        id: 2,
+        name: '第二',
+        visible: false
+    }, {
+        id: 3,
+        name: '第三',
+        visible: false
+    }, {
+        id: 4,
+        name: '第四',
+        visible: false
+    }, {
+        id: 5,
+        name: '第五',
+        visible: false
+    }, {
+        id: 6,
+        name: '第六',
+        visible: false
+    }, {
+        id: 7,
+        name: '第七',
+        visible: false
+    }]
 }, {
-    id: 2,
-    name: '第二',
-    visible: false
-}, {
-    id: 3,
-    name: '第三',
-    visible: false
-}, {
-    id: 4,
-    name: '第四',
-    visible: false
-}, {
-    id: 5,
-    name: '第五',
-    visible: false
-}, {
-    id: 6,
-    name: '第六',
-    visible: false
-}, {
-    id: 7,
-    name: '第七',
-    visible: false
+    key: 'header',
+    name: '镖头',
+    option: [{
+        id: 1,
+        name: '第一',
+        visible: true
+    }, {
+        id: 2,
+        name: '第二',
+        visible: false
+    }, {
+        id: 3,
+        name: '第三',
+        visible: false
+    }, {
+        id: 4,
+        name: '第四',
+        visible: false
+    }, {
+        id: 5,
+        name: '第五',
+        visible: false
+    }, {
+        id: 6,
+        name: '第六',
+        visible: false
+    }, {
+        id: 7,
+        name: '第七',
+        visible: false
+    }]
 }]
 
 class Demo extends React.Component{
@@ -87,17 +124,17 @@ class Demo extends React.Component{
                     top: '50px',
                     border: '1px solid #e8e8e8',
                     boxShadow: '0 0 5px #e8e8e8',
-                    right: '0',
                     zIndex: '1000',
+                    right: '0',
                     opacity: !initVisible ? '0' : '1' 
                 }}>
                     <ColumnsSetting 
                         option={this.state.data} 
                         singleKey='id'
-                        sort={true}
-                        editName={true}
                         checkedKey='visible' 
                         labelKey="name"
+                        sort={true}
+                        editName={true}
                         resetClick={()=> this.resetClick()}
                         confirmClick={(arr) => this.confirmClick(arr)}
                         cancelClick={() => this.cancelClick()}
@@ -110,5 +147,5 @@ class Demo extends React.Component{
     }
 }
 
-export default <Demo/>
+export default Demo
 `

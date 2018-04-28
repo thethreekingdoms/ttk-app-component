@@ -1,19 +1,21 @@
 import React from 'react'
 import classNames from 'classnames'
+import isequal from 'lodash.isequal'
 import clonedeep from 'lodash.clonedeep'
-import Checkbox from '../checkbox/index'
 import Button from '../button/index'
-import Icon from '../icon/index'
-import Input from '../input/index'
+import Tabs from '../tabs/index'
+import ItemOption from './itemOption'
+
+const TabPane = Tabs.TabPane
 
 class ColumnsSetting extends React.Component {
     constructor(props){
         super(props)
         this.state = {
             option: clonedeep(props.option) || [],
-            label: '',
-            editingKey: null
+            num: 0 //该字段的作用是itemoption组件重新实例（）。
         }
+        this.childRef = {}
         if( props.setOkListener ) {
             props.setOkListener(this.onOk)
         }
@@ -23,122 +25,33 @@ class ColumnsSetting extends React.Component {
     }
 
     onOk = async () => {
-        return {
-            type: 'confirm',
-            option: clonedeep(this.state.option)
-        }
+        
     }
 
     onCancel = async() => {
+        
+    }
+
+    //如果不胡乱传递props我肯定不这样写
+    getProps = ( props) => {
+        const { 
+            option, singleKey, checkedKey, labelKey, sort, editName, itemClassName  
+        } = props
         return {
-            type: 'cancel',
-            option: clonedeep(this.props.option)
+            option, singleKey, checkedKey, labelKey, sort, editName, itemClassName
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({
-            option: clonedeep(nextProps.option) || []
-        })
-    }
-
-    componentWillUnmount = () => {
-        if (window.removeEventListener) {
-            window.removeEventListener('click', this.winClick, false)
-        } else if (window.detachEvent) {
-            window.detachEvent('click', this.winClick)
-        } else {
-            window.onclick = undefined
-        }
-    }
-
-    componentDidMount = () => {
-        if (window.addEventListener) {
-            window.addEventListener('click', this.winClick, false)
-        } else if (window.attachEvent) {
-            window.attachEvent('click', this.winClick)
-        } else {
-            window.onclick = this.winClick
-        }
-    }
-
-    checkInputHidden = (className) => {
-        if( !className ){
-            return true
-        }else{
-            return !className.includes('ttk-ColumnsSetting-item-input') && 
-            !className.includes('ttk-ColumnsSetting-item-action-edit')
-        }
-         
-    }
-
-    winClick = (e) => {
-        if( e && e.target && this.state.editingKey && this.checkInputHidden(e.target.className) ){
+        const nextOption = this.getProps(nextProps)
+        const preOption = this.getProps(this.props)
+        if( !isequal(nextOption, preOption) ){
             this.setState({
-                editingKey: null
+                option: clonedeep(nextProps.option) || []
             })
         }
     }
 
-    itemClick = (key, e) => {
-        const { singleKey, checkedKey, itemClick } = this.props
-        const { option } = this.state
-        const index = option.findIndex(item => item[singleKey] == key)
-        if( index > -1 ){
-            option[index][checkedKey] = e.target.checked
-            this.setState({
-                option,
-            })
-            itemClick && itemClick(option, option[index])
-        }
-    }
-
-    exchangeArritemPosition = (arr, x, y) => {
-        let a = arr[x],
-        b = arr[ y]
-
-        arr[y] = a
-        arr[x] = b
-        return arr
-    }
-
-    arrowUp = (key) => {
-        const { singleKey } = this.props
-        const { option } = this.state
-        const index = option.findIndex(item => item[singleKey] == key)
-        if( index > 0 ){
-            this.setState({
-                option: this.exchangeArritemPosition(option, index, index-1)
-            })
-        }
-    }
-
-    arrowDown = (key) => {
-        const { singleKey } = this.props
-        const { option } = this.state
-        const index = option.findIndex(item => item[singleKey] == key)
-        if( index < option.length - 1 ){
-            this.setState({
-                option: this.exchangeArritemPosition(option, index, index+1)
-            })
-        }
-    }
-
-    editClick = (key) => {
-        this.setState({
-            editingKey: key
-        })
-    }
-
-    inputEdit = (key, e) => {
-        const { singleKey, labelKey } = this.props
-        const { option } = this.state
-        const index = option.findIndex(item => item[singleKey] == key)
-        option[index][labelKey] = e.target.value
-        this.setState({
-            option
-        })
-    }
 
     renderItem = (arr) => {
         const { itemClassName, labelKey, checkedKey, singleKey, sort, editName } = this.props
@@ -147,62 +60,28 @@ class ColumnsSetting extends React.Component {
             'ttk-ColumnsSetting-item': true,
             [itemClassName]: !!itemClassName
         })
-        return arr.map(item => {
+        const childArr =  arr.map(item => {
             return (
-                <div className={className} key={item[singleKey]}>
-                    <div className='ttk-ColumnsSetting-item-container'>
-                        {
-                            editingKey == item[singleKey] ? (
-                                <Input
-                                    className="ttk-ColumnsSetting-item-input"
-                                    value={item[labelKey]}
-                                    onChange={(e) => this.inputEdit(item[singleKey], e)} 
-                                />
-                            ) : (
-                                <Checkbox 
-                                    checked={item[checkedKey]}
-                                    onChange={(e)=>this.itemClick(item[singleKey], e)}
-                                >
-                                    {item[labelKey]}
-                                </Checkbox>
-                            )
-                        }
-                    </div>
-                    <div className="ttk-ColumnsSetting-item-action">
-                        {
-                            sort ? (
-                                <Icon 
-                                    type="arrow-up" 
-                                    title="上移" 
-                                    onClick={() => this.arrowUp(item[singleKey])} 
-                                />
-                            ) : null
-                        }
-                        {
-                            sort ? (
-                                <Icon 
-                                    type="arrow-down" 
-                                    title="下移" 
-                                    onClick={() => this.arrowDown(item[singleKey])} 
-                                />
-                            ) : null
-                        }
-                        {
-                            editName ? (
-                                <Icon 
-                                    className="ttk-ColumnsSetting-item-action-edit"
-                                    fontFamily='edficon' 
-                                    type="bianji" 
-                                    title="编辑"
-                                    onClick={() => this.editClick(item[singleKey])}
-                                />
-                            ) : null
-                        }
-                        
-                    </div>
-                </div>
+                <TabPane forceRender={true} tab={item.name} key={item.key}>
+                    <ItemOption 
+                        num={this.state.num}
+                        ref={(child) => this.childRef[item.key] = child}
+                        option={item.option}
+                        labelKey={labelKey}
+                        checkedKey={checkedKey}
+                        singleKey={singleKey}
+                        sort={sort}
+                        editName={editName}
+                        itemClassName={itemClassName}
+                    />
+                </TabPane>
             )
         })
+        return (
+            <Tabs defaultActiveKey="1">
+                {childArr}
+            </Tabs>
+        )
     }
 
     resetClick = () => {
@@ -222,13 +101,26 @@ class ColumnsSetting extends React.Component {
     confirmClick = () => {
         const { confirmClick } =  this.props
         const { option } = this.state
-        return confirmClick && confirmClick(option)
+        let value = option.map(item => {
+            if( this.childRef[item.key] ){
+                return {
+                    ...item,
+                    option: this.childRef[item.key].getValue()
+                }
+            }
+            return item
+        })
+        this.setState({
+            option: value
+        })
+        return confirmClick && confirmClick(value)
     }
 
     cancelClick = () => {
         const { cancelClick, option } = this.props
         this.setState({
-            option: clonedeep(option)
+            option: clonedeep(option),
+            num: Math.random() ,
         })
         return cancelClick && cancelClick()
     }
