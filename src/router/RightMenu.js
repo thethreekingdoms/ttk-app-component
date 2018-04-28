@@ -287,10 +287,11 @@ class RightMenu extends React.Component {
             <Menu
                 mode="inline"
                 theme="dark"
+                defaultOpenKeys={['sub1']}
                 inlineCollapsed={this.state.collapsed}
                 onSelect={(e) =>this.handleClick(e.key)}
             >
-                <SubMenu key='sub2' title="组件列表">
+                <SubMenu key='sub1' title="组件列表">
                     {this.renderItem()}
                 </SubMenu>
             </Menu>
